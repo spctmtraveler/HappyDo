@@ -29,52 +29,53 @@ switch($request_method)
         }
         break;
 
-        case 'PUT':
-            // Handle PUT request for updating task completion
-            $data = json_decode(file_get_contents("php://input"));
-            $id = $data->id ?? null;
-            $completed = $data->completed ?? null;
-        
-            if (isset($id, $completed)) {
-                $result = $task->updateTaskCompletion($id, $completed);
-                echo json_encode(['success' => $result]);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Missing task ID or completion status']);
-            }
-            break;      
-        
-        case 'POST':
-            // Decode JSON from the request body
-            $data = json_decode(file_get_contents("php://input"));
-        
-            if (!empty($data->task)) {
-                $task->task_name = $data->task;
-                $response = $task->createTask();
-                echo json_encode($response);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Task name is required']);
-            }
-            break;
-            
-            
-            
-
     case 'PUT':
-        // Update a task
-        $id=intval($_GET["id"]);
-        $task->updateTask($id);
+        // Handle PUT request for updating task completion or updating a task
+        $data = json_decode(file_get_contents("php://input"));
+        $id = $data->id ?? null;
+        $completed = $data->completed ?? null;
+
+        if (isset($id, $completed)) {
+            $result = $task->updateTaskCompletion($id, $completed);
+            echo json_encode(['success' => $result]);
+        } elseif (!empty($_GET["id"])) {
+            $id = intval($_GET["id"]);
+            $task->updateTask($id);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Missing task ID or completion status']);
+        }
         break;
 
-    case 'DELETE':
+    case 'POST':
+        // Decode JSON from the request body
+        $data = json_decode(file_get_contents("php://input"));
+
+        if (!empty($data->task)) {
+            $task->task_name = $data->task;
+            $response = $task->createTask();
+            echo json_encode($response);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Task name is required']);
+        }
+        break;
+
+        case 'DELETE':
             // Delete a task
-            $id=intval($_GET["id"]);
-            $task->deleteTask($id);
+            $id = intval($_GET["id"]);
+            $result = $task->deleteTask($id);
+            
+            if ($result) {
+                echo json_encode(['success' => true, 'message' => 'Task deleted successfully']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to delete task']);
+            }
             break;
+        
 
     default:
-            // Invalid request method
-            header("HTTP/1.0 405 Method Not Allowed");
-            break;
+        // Invalid request method
+        header("HTTP/1.0 405 Method Not Allowed");
+        break;
 
 }
 
