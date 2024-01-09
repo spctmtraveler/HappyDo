@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#task-form {
+    margin-bottom: 1em;
+}
+
+#task-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task-item {
+    margin-bottom: 0.5em;
+}
+
+.completed {
+    text-decoration: line-through;
+}
+
+.delete-icon {
+    display: none;
+    margin-left: 1ch; /* character space for breathing room */
+    cursor: pointer;
+    color: red;
+}
+
+.task-item:hover .delete-icon {
+    display: inline; /* Show only on hover */
+}
