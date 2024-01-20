@@ -4,6 +4,13 @@ function createTaskElement(task) {
     taskItem.className = 'task-item' + (task.completed === '0' ? '' : ' completed');
     taskItem.setAttribute('data-task-id', task.id);
 
+    // Create the drag handle
+    var dragHandle = document.createElement('span');
+    dragHandle.classList.add('drag-handle');
+    dragHandle.textContent = '≡'; // Using the Unicode character for the drag handle icon
+    taskItem.appendChild(dragHandle);
+ 
+
     var checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     // Set the checkbox based on the completion status. Assuming '0' means not completed.

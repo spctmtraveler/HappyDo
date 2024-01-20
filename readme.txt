@@ -1,5 +1,8 @@
 Everytime you come back to this, you need to restart the PHP and MySQL servers.
 Open the Terminal and copy/paste into it: docker-compose up -d
+
+docker-compose up -d
+
 A toast should pop up to open the webpage, but you can also go here: https://literate-space-broccoli-qwvgjg9gq4vh449p-8000.app.github.dev/
 
 ####How to access the DB from Terminal:####

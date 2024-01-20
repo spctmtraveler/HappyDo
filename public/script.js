@@ -14,8 +14,19 @@ window.onload = function() {
             } else {
                 console.log(data.message || 'No tasks found');
             }
+
+             //initialize the sortable library
+            var sortable = new Sortable(taskList, {
+            draggable: '.task-item',
+            handle: '.drag-handle',
+            animation: 150
+          });
+          
         })
         .catch(error => console.error('Error:', error));
+
+       
+          
 };
 
 

@@ -15,6 +15,15 @@ body {
     margin-bottom: 0.5em;
 }
 
+/* Add this to your /public/styles.css file */
+.drag-handle {
+    cursor: move; /* This gives a visual indication that the element is movable */
+    user-select: none; /* This prevents the text from being selectable, which can interfere with the drag action */
+    margin-right: 10px; /* Adjust spacing as needed */
+}
+
+  
+
 .completed {
     text-decoration: line-through;
 }
