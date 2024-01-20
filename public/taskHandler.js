@@ -7,7 +7,7 @@ function createTaskElement(task) {
     // Create the drag handle
     var dragHandle = document.createElement('span');
     dragHandle.classList.add('drag-handle');
-    dragHandle.textContent = '≡'; // Using the Unicode character for the drag handle icon
+    dragHandle.textContent = '='; // dragHandle.textContent = '';  Using the Unicode character for the drag handle icon
     taskItem.appendChild(dragHandle);
  
 

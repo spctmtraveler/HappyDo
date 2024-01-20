@@ -27,5 +27,12 @@ SELECT * FROM tasks WHERE id = 5;
 
 ####################
 
+CODEBASE PDF CREATOR SCRIPT:
+
+Run this from the root directory. (The first line is to give permission)
+
+chmod +x createPDF.sh   
+
+./createPDF.sh
 
 

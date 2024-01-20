@@ -38,3 +38,16 @@ body {
 .task-item:hover .delete-icon {
     display: inline; /* Show only on hover */
 }
+
+/* Add this to your styles.css file */
+.sortable-chosen {
+    opacity: 0.6; /* Make the item semi-transparent while dragging */
+    background-color: #f0f0f0; /* Change background color */
+    border: 1px dashed #000; /* Add a dashed border */
+}
+
+/* Add this to your styles.css file */
+.sortable-ghost {
+    opacity: 0.4; /* Make the placeholder semi-transparent */
+    background-color: #c8ebfb; /* Change background color */
+}
