@@ -3,6 +3,8 @@ function createTaskElement(task) {
     // Set the class based on the completion status. Assuming '0' means not completed.
     taskItem.className = 'task-item' + (task.completed === '0' ? '' : ' completed');
     taskItem.setAttribute('data-task-id', task.id);
+    taskItem.setAttribute('data-task-id', task.id);
+
 
     // Create the drag handle
     var dragHandle = document.createElement('span');

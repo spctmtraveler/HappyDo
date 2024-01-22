@@ -1,14 +1,17 @@
 body {
     font-family: Arial, sans-serif;
+    margin-left: 20px;
 }
 
 #task-form {
     margin-bottom: 1em;
 }
 
-#task-list {
+.task-list {
     list-style-type: none;
-    padding: 0;
+    margin-bottom: 20px;
+    min-height: 20px; /* Give a minimum height for empty lists */
+    padding: 10px;
 }
 
 .task-item {
@@ -19,7 +22,8 @@ body {
 .drag-handle {
     cursor: move; /* This gives a visual indication that the element is movable */
     user-select: none; /* This prevents the text from being selectable, which can interfere with the drag action */
-    margin-right: 10px; /* Adjust spacing as needed */
+    margin-right: 5px; /* Adjust spacing as needed */
+    color: lightgrey; 
 }
 
   
@@ -51,3 +55,6 @@ body {
     opacity: 0.4; /* Make the placeholder semi-transparent */
     background-color: #c8ebfb; /* Change background color */
 }
+
+
+
