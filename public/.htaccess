@@ -1,0 +1,5 @@
+DirectoryIndex home.php
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# Rewrite rules and other directives can go here
+</IfModule>

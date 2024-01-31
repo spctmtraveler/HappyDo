@@ -20,7 +20,7 @@ window.onload = function () {
     });
 
     // Fetch tasks and add them to the 'unprioritized-tasks' list as an example
-    fetch('https://literate-space-broccoli-qwvgjg9gq4vh449p-8000.app.github.dev/index.php')
+    fetch('http://localhost/HappyDo/public/index.php')
         .then(response => response.json())
         .then(data => {
             if (data.data && data.data.length > 0) {
@@ -62,7 +62,7 @@ document.getElementById('task-form').addEventListener('submit', function (e) {
 
     console.log('Submitting form with task:', taskName);
 
-    fetch('https://literate-space-broccoli-qwvgjg9gq4vh449p-8000.app.github.dev/index.php', {
+    fetch('http://localhost/HappyDo/public/index.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ document.getElementById('task-form').addEventListener('submit', function (e) {
 });
 
 function updateTaskCompletion(id, completed) {
-    fetch('https://literate-space-broccoli-qwvgjg9gq4vh449p-8000.app.github.dev/index.php', {
+    fetch('http://localhost/HappyDo/public/index.php', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ function updateTaskCompletion(id, completed) {
 
 function deleteTask(id) {
     if (confirm('Are you sure you want to delete this task?')) {
-        fetch('https://literate-space-broccoli-qwvgjg9gq4vh449p-8000.app.github.dev/index.php?id=' + id, {
+        fetch('http://localhost/HappyDo/public/index.php?id=' + id, {
             method: 'DELETE',
         })
         .then(response => response.json())  // This line expects a JSON response

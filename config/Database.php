@@ -1,9 +1,10 @@
 <?php
 class Database {
-    private $host = 'db';
+    private $host = 'localhost';
     private $db_name = 'happydo';
-    private $username = 'user';
-    private $password = 'password';
+    private $username = 'root';
+    private $password = '';
+    //private $password = '9a00wo41';
     private $conn;
 
     public function connect() {
