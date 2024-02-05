@@ -17,8 +17,8 @@ class Task {
 
     public function getTasks() {
 
-// Query only incomplete tasks
-$query = 'SELECT * FROM ' . $this->table . ' WHERE completed = 0';
+    // Query only incomplete tasks
+    $query = 'SELECT * FROM ' . $this->table . ' WHERE completed = 0';
     
         // Prepare statement
         $stmt = $this->conn->prepare($query);
@@ -33,23 +33,15 @@ $query = 'SELECT * FROM ' . $this->table . ' WHERE completed = 0';
             // Tasks array
             $tasks_arr = array();
             $tasks_arr['data'] = array();
-    
+        
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
-    
-                $task_item = array(
-                    'id' => $id,
-                    'task_name' => $task_name,
-                    'completed' => $completed,
-                );
-    
-                // Push to "data"
-                array_push($tasks_arr['data'], $task_item);
+                // Directly use $row, as it already contains all the fields
+                array_push($tasks_arr['data'], $row);
             }
-    
+        
             // Turn to JSON & output
             echo json_encode($tasks_arr);
-    
+        
         } else {
             // No Tasks
             echo json_encode(['message' => 'No Tasks Found']);
@@ -128,6 +120,30 @@ $query = 'SELECT * FROM ' . $this->table . ' WHERE completed = 0';
         }
         return false;
     }
+
+    public function updateTaskPriority($id, $priority) {
+        $query = "UPDATE " . $this->table . " SET priority = :priority WHERE id = :id";
+    
+        $stmt = $this->conn->prepare($query);
+    
+        // Clean the data
+        $priority = htmlspecialchars(strip_tags($priority));
+        $id = htmlspecialchars(strip_tags($id));
+    
+        // Bind the data
+        $stmt->bindParam(':priority', $priority);
+        $stmt->bindParam(':id', $id);
+    
+        // Attempt to execute
+        if($stmt->execute()) {
+            return true;
+        }
+    
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+    }
+    
+    
 
     public function deleteTask($id) {
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';

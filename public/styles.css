@@ -1,60 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f3f7f7; /* Serene background color */
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: 'Quicksand', sans-serif;
+}
+
+#main-container {
+    text-align: center; /* Center the title and task form */
+    width: 80%;
+    max-width: 600px; /* Maximum width to keep the content readable */
+    margin: 20px auto; /* Center the main container */
+    padding: 2em;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+h1 { 
+    color: #ff8a65; 
+    margin-bottom: 0.5em;
+}
+
+h2 { 
+    color: rgb(207, 207, 207); 
+    font-size: medium;
+    position: relative;
+    margin-left: -25px;
+    margin-bottom: 0.5em;
 }
 
 #task-form {
     margin-bottom: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input[type="text"], button {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #ffcc4d; /* Happy yellow */
+    color: #fff;
+    cursor: pointer;
+    border: none; /* Remove default border */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow for the button */
 }
 
 .task-list {
+    text-align: left; /* Align the tasks to the left */
     list-style-type: none;
-    margin-bottom: 20px;
-    min-height: 20px; /* Give a minimum height for empty lists */
-    padding: 10px;
+    margin: 0;
+    padding: 0;
+    /* background-color: #fafafa; /* Light background for tasks */
+    border-radius: 4px;
 }
 
 .task-item {
-    margin-bottom: 0.5em;
+    margin: 10px 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+
+    /* Put each task in a colored box */
+    /* padding: 10px; */
+    /* background-color: #e8e8e8; /* Minimalist task color */    
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for each task */
 }
 
-/* Add this to your /public/styles.css file */
 .drag-handle {
-    cursor: move; /* This gives a visual indication that the element is movable */
-    user-select: none; /* This prevents the text from being selectable, which can interfere with the drag action */
-    margin-right: 5px; /* Adjust spacing as needed */
-    color: lightgrey; 
-}
-
-  
-
-.completed {
-    text-decoration: line-through;
+    cursor: move;
+    user-select: none;
+    margin-right: 10px;
 }
 
 .delete-icon {
-    display: none;
-    margin-left: 1ch; /* character space for breathing room */
+    margin-left: 1ch;
     cursor: pointer;
-    color: red;
 }
+
+
+/* Make task handling icons appear only on hover */
+.drag-handle,
+.delete-icon {
+    color: transparent
+}
+
+.task-item:hover .drag-handle,
+.task-item:hover .delete-icon {
+    color: #9b9b9b; /* Ensure drag handle icon is visible on hover */
+}
+
+
 
 .task-item:hover .delete-icon {
-    display: inline; /* Show only on hover */
+    display: inline; /* Ensure delete icon is visible on hover */
 }
 
-/* Add this to your styles.css file */
+.task-item.completed .task-name {
+    text-decoration: line-through;
+    color: #a0a0a0;
+}
+
 .sortable-chosen {
-    opacity: 0.6; /* Make the item semi-transparent while dragging */
-    background-color: #f0f0f0; /* Change background color */
-    border: 1px dashed #000; /* Add a dashed border */
+    opacity: 0.6;
+    background-color: #e2e2e2;
+    border: 1px dashed #a0a0a0;
 }
 
-/* Add this to your styles.css file */
 .sortable-ghost {
-    opacity: 0.4; /* Make the placeholder semi-transparent */
-    background-color: #c8ebfb; /* Change background color */
+    opacity: 0.4;
+    background-color: #cce8ff;
 }
 
-
-
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    #main-container {
+        width: 95%;
+        padding: 1em;
+    }
+}

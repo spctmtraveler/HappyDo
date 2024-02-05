@@ -9,15 +9,54 @@ window.onload = function () {
 
     // Initialize SortableJS for each task list
     taskLists.forEach(function (taskList) {
+
         new Sortable(taskList, {
-            group: 'shared', // Set a group name to allow dragging between lists
+
+            group: 'shared', 
             animation: 150,
             draggable: '.task-item',
-            onAdd: function (event) {
-                // Handle task drop logic here if needed
+
+            onAdd: function(event) {
+            var taskElement = event.item;   
+            var taskId = taskElement.dataset.taskId;
+            var newPriorityList = event.to.id;
+            var newPriority = newPriorityList.split('-')[1]; // Index 1 for 'a', not 2
+
+
+            console.log('taskID:', taskId); // This should show task id numer
+            console.log('New Priority List ID:', newPriorityList); // This should show the full ID
+            console.log('New priority:', newPriority); // This should show the extracted priority character
+        
+
+            fetch('http://localhost/HappyDo/public/index.php', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: taskId,
+                    priority: newPriority
+                })
+            })
+            
+            .then(response => response.json())
+            .then(responseData => {
+                console.log('Priority updated:', responseData);  
+            })
+            .catch(error => {
+                console.error('Error updating priority:', error);
+            });
+
+            },
+            
+            onUpdate: function(event) {
+            toggleUnprioritizedDisplay(); 
             }
+
         });
+
     });
+
 
     // Fetch tasks and add them to the 'unprioritized-tasks' list as an example
     fetch('http://localhost/HappyDo/public/index.php')
@@ -49,6 +88,8 @@ window.onload = function () {
         .catch(error => {
             console.error('Error:', error);
         });
+
+        
 };
 
 /**
@@ -77,7 +118,8 @@ document.getElementById('task-form').addEventListener('submit', function (e) {
             console.log('Received data:', data);
             // Only add the task to the list if it was successfully created on the server
             if (data.success) {
-                var newTask = { id: data.id, task_name: taskName, completed: '0' };
+                var newTask = { id: data.id, task_name: taskName };
+
                 console.log('New task object:', newTask);
                 var taskList = document.getElementById('unprioritized-tasks');
                 addTaskToList(taskList, newTask);
@@ -114,7 +156,6 @@ function updateTaskCompletion(id, completed) {
     .catch(error => console.error('Error:', error));
 }
 
-
 function deleteTask(id) {
     if (confirm('Are you sure you want to delete this task?')) {
         fetch('http://localhost/HappyDo/public/index.php?id=' + id, {
@@ -127,6 +168,7 @@ function deleteTask(id) {
                 var taskItem = document.querySelector('li[data-task-id="' + id + '"]');
                 if (taskItem) {
                     taskItem.remove();
+                    toggleUnprioritizedDisplay(); // Call the function to toggle the display of the unprioritized tasks if necessary
                 }
             }
         })

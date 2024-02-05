@@ -2,27 +2,30 @@
 <html>
 <head>
     <title>Happy Do</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="js/Sortable.min.js"></script> 
 </head>
 <body>
-    <h1>Happy Do</h1>
-    <form id="task-form">
-        <input type="text" id="task-input" placeholder="Enter a task">
-        <button type="submit">Add Task</button>
-    </form>
-    
-    <!-- Add this structure below the task entry form -->
-    Unprioritized
-    <ul id="unprioritized-tasks" class="task-list"></ul>
-    A
-    <ul id="list-a-tasks" class="task-list"></ul>
-    B
-    <ul id="list-b-tasks" class="task-list"></ul>
-    C
-    <ul id="list-c-tasks" class="task-list"></ul>
+    <div class="main-container">
+        <h1>Happy Do</h1>
+        <form id="task-form">
+            <input type="text" id="task-input" placeholder="Enter a task">
+            <button type="submit">Add Task</button>
+        </form>
+        
+        <!-- Add this structure below the task entry form -->
+        <h2 id="unprioritized-title">Unprioritized</h2>
+        <ul id="unprioritized-tasks" class="task-list"></ul>
+        <h2>A</h2>
+        <ul id="list-a-tasks" class="task-list"></ul>
+        <h2>B</h2>
+        <ul id="list-b-tasks" class="task-list"></ul>
+        <h2>C</h2>
+        <ul id="list-c-tasks" class="task-list"></ul>
 
-    <script src="taskHandler.js"></script>
-    <script src="script.js"></script>
+        <script src="taskHandler.js"></script>
+        <script src="script.js"></script>
+    </div>
 </body>
 </html>

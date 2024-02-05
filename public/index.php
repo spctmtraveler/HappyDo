@@ -30,21 +30,36 @@ switch($request_method)
         break;
 
     case 'PUT':
-        // Handle PUT request for updating task completion or updating a task
+        // Handle PUT request for updating task completion, updating a task, or updating task priority
         $data = json_decode(file_get_contents("php://input"));
         $id = $data->id ?? null;
         $completed = $data->completed ?? null;
-
+        $priority = $data->priority ?? null; // New priority field
+    
+        error_log("Received data: ID: $id, Completed: $completed, Priority: $priority");
+    
         if (isset($id, $completed)) {
             $result = $task->updateTaskCompletion($id, $completed);
             echo json_encode(['success' => $result]);
+        } elseif (isset($id, $priority)) {
+            // Update task priority
+            error_log("Attempting to update priority for task ID $id with priority $priority");
+            $result = $task->updateTaskPriority($id, $priority);
+            if ($result) {
+                error_log("Priority update successful for task ID $id");
+            } else {
+                error_log("Priority update failed for task ID $id");
+            }
+            echo json_encode(['success' => $result]);
+
         } elseif (!empty($_GET["id"])) {
             $id = intval($_GET["id"]);
             $task->updateTask($id);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Missing task ID or completion status']);
+        echo json_encode(['success' => false, 'message' => 'Missing task ID, completion status, or priority']);
         }
         break;
+        
 
     case 'POST':
         // Decode JSON from the request body
