@@ -43,7 +43,6 @@ h2 {
 #task-form {
     margin-bottom: 1em;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -63,12 +62,29 @@ button {
 }
 
 .nav-menu {
-    color: #ff8a65; 
+    opacity: 0; /* Initially invisible */
+    transition: opacity 5s ease-in-out; /* Smooth transition */
 }
 
-.nav-menu a {
-    padding: 0.5em;
+.nav-menu:hover {
+    opacity: 1; /* Visible on hover */
+    transition: opacity 0.2s ease-in-out; /* Slower transition for disappearing */
+
 }
+
+.nav-menu button {
+    background-color: #ffcc4d; /* Happy yellow */
+    color: #000;
+    cursor: pointer;
+    border: none; /* Remove default border */
+    height: 25px;
+    width: 70px;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow for the button */
+    margin: 4px;
+    padding: 1px;
+}
+
 
 .task-list {
     text-align: left; /* Align the tasks to the left */
@@ -122,7 +138,7 @@ button {
 
 .task-item.completed .task-name {
     text-decoration: line-through;
-    color: #a0a0a0;
+    color: #b4b4b4;
 }
 
 .sortable-chosen {
