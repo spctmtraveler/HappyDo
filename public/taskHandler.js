@@ -52,6 +52,7 @@ function toggleUnprioritizedDisplay() {
     let unprioritizedTitle = document.getElementById('unprioritized-title'); // Get the header
     if (unprioritizedTasks) {
       let taskCount = unprioritizedTasks.getElementsByTagName('li').length;
+      console.log('toggleUnprioritizedDisplay called. Tasks = ', { taskCount });
       if (taskCount === 0) {
         unprioritizedTasks.style.display = 'none';
         if (unprioritizedTitle) unprioritizedTitle.style.display = 'none'; // Hide the header

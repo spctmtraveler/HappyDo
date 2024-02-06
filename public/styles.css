@@ -35,9 +35,10 @@ h2 {
     color: rgb(207, 207, 207); 
     font-size: medium;
     position: relative;
-    margin-left: -25px;
+    margin-left: -5px;
     margin-bottom: 0.5em;
 }
+
 
 #task-form {
     margin-bottom: 1em;
@@ -59,6 +60,14 @@ button {
     cursor: pointer;
     border: none; /* Remove default border */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow for the button */
+}
+
+.nav-menu {
+    color: #ff8a65; 
+}
+
+.nav-menu a {
+    padding: 0.5em;
 }
 
 .task-list {

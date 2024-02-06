@@ -65,21 +65,16 @@ class Task {
     
         // Check if any task
         if($row) {
-            $task_item = array(
-                'id' => $id,
-                'task_name' => $row['task_name'],
-                'completed' => $row['completed'],
+            // Wrap the task data in an array structure similar to getTasks(), even though there is only 1 task in it. This allows us to parse the data in the same way on the frontend.
+            $task_arr = array(
+                'data' => $row  // Single task data
             );
-    
-            // Turn to JSON & output
-            echo json_encode($task_item);
-    
+            echo json_encode($task_arr);  // Output the structured array as JSON
         } else {
             // No Task
-            echo json_encode(
-                array('message' => 'No Task Found')
-            );
+            echo json_encode(['message' => 'No Task Found']);
         }
+        
     }
 
     public function createTask() {

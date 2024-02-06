@@ -21,7 +21,7 @@ window.onload = function () {
             var taskId = taskElement.dataset.taskId;
             var newPriorityList = event.to.id;
             var newPriority = newPriorityList.split('-')[1]; // Index 1 for 'a', not 2
-
+            toggleUnprioritizedDisplay(); 
 
             console.log('taskID:', taskId); // This should show task id numer
             console.log('New Priority List ID:', newPriorityList); // This should show the full ID
@@ -50,6 +50,7 @@ window.onload = function () {
             },
             
             onUpdate: function(event) {
+            console.log("onUpdate");
             toggleUnprioritizedDisplay(); 
             }
 
@@ -65,21 +66,29 @@ window.onload = function () {
             if (data.data && data.data.length > 0) {
                 data.data.forEach(task => {
                     var taskList;
-                    switch (task.priority) {
+                    var priority = task.priority ? task.priority.toUpperCase() : null; // Convert priority to uppercase
+                    console.log('task Priority:', task.priority); // This should show task id numer
+                    switch (priority) {
                         case 'A':
                             taskList = document.getElementById('list-a-tasks');
+                            console.log('Put task in list A');
                             break;
                         case 'B':
                             taskList = document.getElementById('list-b-tasks');
+                            console.log('Put task in list B');
                             break;
                         case 'C':
                             taskList = document.getElementById('list-c-tasks');
+                            console.log('Put task in list C');
                             break;
                         default:
                             taskList = document.getElementById('unprioritized-tasks');
+                            console.log('Put task in unprioritized list');
                     }
                     var taskElement = createTaskElement(task);
                     taskList.appendChild(taskElement);
+                    toggleUnprioritizedDisplay(); // Call the function to toggle the display of the unprioritized tasks if necessary    
+                    
                 });
             } else {
                 console.log(data.message || 'No tasks found');
@@ -174,5 +183,16 @@ function deleteTask(id) {
         })
         .catch(error => console.error('Error:', error));
     }
+}
+
+// Fetch a single task by ID
+function fetchTask(taskId) {
+    fetch(`http://localhost/HappyDo/public/index.php?id=${taskId}`)
+    .then(response => response.json())
+    .then(data => {
+        console.log('Task data:', data);
+        // Process and display the task data on the front end
+    })
+    .catch(error => console.error('Error fetching task:', error));
 }
 
