@@ -15,10 +15,16 @@ class Task {
         $this->conn = $db;
     }
 
-    public function getTasks() {
+    public function getTasks($filterType = 'today') {
+            if ($filterType === 'today') {
+                $query = 'SELECT * FROM ' . $this->table . ' WHERE completed = 0 AND (backlog IS NULL OR backlog = 0)';
+            } elseif ($filterType === 'back') {
+                $query = 'SELECT * FROM ' . $this->table . ' WHERE completed = 0 AND backlog IS NOT NULL AND backlog != 0';
+            } else {
+                $query = 'SELECT * FROM ' . $this->table . ' WHERE completed = 0 AND (backlog IS NULL OR backlog = 0)';
+            } //default is the same as today
 
-    // Query only incomplete tasks
-    $query = 'SELECT * FROM ' . $this->table . ' WHERE completed = 0';
+
     
         // Prepare statement
         $stmt = $this->conn->prepare($query);
@@ -77,20 +83,6 @@ class Task {
         
     }
 
-    public function createTask() {
-        $query = 'INSERT INTO ' . $this->table . ' SET task_name = :task_name, completed = 0';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':task_name', $this->task_name);
-        
-        // Execute the query and check if the insert was successful
-        if($stmt->execute()) {
-            return ['success' => true, 'message' => 'Task created successfully'];
-        } else {
-            return ['success' => false, 'message' => 'Task creation failed', 'error' => $stmt->errorInfo()];
-        }
-    }
-    
-
     public function updateTask($id) {
         $query = 'UPDATE ' . $this->table . ' SET task_name = :task_name, completed = :completed WHERE id = :id';
         $stmt = $this->conn->prepare($query);
@@ -137,6 +129,29 @@ class Task {
         printf("Error: %s.\n", $stmt->error);
         return false;
     }
+
+    public function updateTaskBacklog($id, $backlog) {
+        $query = "UPDATE " . $this->table . " SET backlog = :backlog WHERE id = :id";
+    
+        $stmt = $this->conn->prepare($query);
+    
+        // Clean the data
+        $backlog = htmlspecialchars(strip_tags($backlog));
+        $id = htmlspecialchars(strip_tags($id));
+    
+        // Bind the data
+        $stmt->bindParam(':backlog', $backlog);
+        $stmt->bindParam(':id', $id);
+    
+        // Attempt to execute
+        if($stmt->execute()) {
+            return true;
+        }
+    
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+    }
+    
     
     
 

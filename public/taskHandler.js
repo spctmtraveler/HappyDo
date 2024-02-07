@@ -40,6 +40,41 @@ function createTaskElement(task) {
     return taskItem;
 }
 
+// In taskHandler.js or script.js, depending on where you prefer to keep your task-related functions
+
+function displayTasks(tasks) {
+  // Clear existing tasks first
+  var taskLists = ['unprioritized-tasks', 'list-a-tasks', 'list-b-tasks', 'list-c-tasks'];
+  taskLists.forEach(function(listId) {
+      document.getElementById(listId).innerHTML = '';
+  });
+
+  // Ensure tasks is always an array to simplify processing
+  if (!Array.isArray(tasks)) {
+      tasks = [tasks]; // Convert single task object to an array for uniform processing
+  }
+
+  // Iterate over the tasks and display each one in the appropriate list
+  tasks.forEach(task => {
+      var taskElement = createTaskElement(task); // Use the existing function to create the task element
+      var taskListId = 'unprioritized-tasks'; // Default list
+
+      // Determine the correct list based on task attributes
+      if (task.priority) {
+          switch(task.priority.toUpperCase()) {
+              case 'A': taskListId = 'list-a-tasks'; break;
+              case 'B': taskListId = 'list-b-tasks'; break;
+              case 'C': taskListId = 'list-c-tasks'; break;
+              default: taskListId = 'unprioritized-tasks'; // Fallback to default list
+          }
+      }
+
+      // Append the task element to the determined list
+      document.getElementById(taskListId).appendChild(taskElement);
+  });
+}
+
+
 function addTaskToList(taskList, task) {
     var taskElement = createTaskElement(task);
     taskList.appendChild(taskElement);

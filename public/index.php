@@ -20,6 +20,14 @@ $response = [];
 switch($request_method)
 {
     case 'GET':
+
+        //Check which filter type was requested
+        if(isset($_GET["filter"])) {
+            $filterType = $_GET["filter"];
+            $task->getTasks($filterType);
+            break;
+        }
+
         // If an id is defined, get a single task. Otherwise, get all tasks.
         if(!empty($_GET["id"])) {
             $id = intval($_GET["id"]);
@@ -35,6 +43,8 @@ switch($request_method)
         $id = $data->id ?? null;
         $completed = $data->completed ?? null;
         $priority = $data->priority ?? null; // New priority field
+        $backlog = $data->backlog ?? null; // New backlog field
+
     
         error_log("Received data: ID: $id, Completed: $completed, Priority: $priority");
     
@@ -53,8 +63,22 @@ switch($request_method)
             echo json_encode(['success' => $result]);
 
         } elseif (!empty($_GET["id"])) {
+
             $id = intval($_GET["id"]);
             $task->updateTask($id);
+
+        } elseif (isset($id, $backlog)) {
+            // Update task backlog
+            error_log("Attempting to update backlog for task ID $id with backlog $backlog");
+            $result = $task->updateTaskBacklog($id, $backlog);
+        
+            if ($result) {
+                error_log("Backlog update successful for task ID $id");
+            } else {
+                error_log("Backlog update failed for task ID $id");
+            }
+        
+            echo json_encode(['success' => $result]);
         } else {
         echo json_encode(['success' => false, 'message' => 'Missing task ID, completion status, or priority']);
         }

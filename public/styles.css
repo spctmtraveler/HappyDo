@@ -61,9 +61,18 @@ button {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow for the button */
 }
 
+#btn-back {
+    z-index: 1000; /* High z-index to ensure visibility */
+}
+
+.task-item.dragging {
+    z-index: 100; /* Lower z-index than the button */
+}
+
 .nav-menu {
     opacity: 0; /* Initially invisible */
     transition: opacity 5s ease-in-out; /* Smooth transition */
+    padding: 10px;
 }
 
 .nav-menu:hover {
@@ -73,8 +82,8 @@ button {
 }
 
 .nav-menu button {
-    background-color: #ffcc4d; /* Happy yellow */
-    color: #000;
+    background-color: #fffed8; /* Light yellow */
+    color: #332925; /* Very dark yellow */
     cursor: pointer;
     border: none; /* Remove default border */
     height: 25px;
@@ -83,7 +92,9 @@ button {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow for the button */
     margin: 4px;
     padding: 1px;
-}
+    outline: 2px dotted #ffcc4d; /* Dotted outline in #ffcc4d */
+  }
+  
 
 
 .task-list {
