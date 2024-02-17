@@ -3,6 +3,8 @@
 ob_start();
 //error_reporting(0); // Turn off all error reporting
 
+date_default_timezone_set('America/Chicago');
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, PUT, DELETE');
@@ -44,6 +46,7 @@ switch($request_method)
         $completed = $data->completed ?? null;
         $priority = $data->priority ?? null; // New priority field
         $backlog = $data->backlog ?? null; // New backlog field
+        $revisit = $data->revisit ?? null;  // Handle the 'revisit' field
 
     
         error_log("Received data: ID: $id, Completed: $completed, Priority: $priority");
@@ -79,8 +82,20 @@ switch($request_method)
             }
         
             echo json_encode(['success' => $result]);
+        } elseif (isset($id, $revisit)) {
+            // Update task review date
+            error_log("Attempting to update revisit date for task ID $id with date $revisit");
+            $result = $task->updateTaskReviewDate($id, $revisit); 
+
+            if ($result) {
+                error_log("Review date update successful for task ID $id");
+            } else {
+                error_log("Review date update failed for task ID $id");
+            }
+
+            echo json_encode(['success' => $result]);
         } else {
-        echo json_encode(['success' => false, 'message' => 'Missing task ID, completion status, or priority']);
+            echo json_encode(['success' => false, 'message' => 'Missing task ID, completion status, or priority']);
         }
         break;
         

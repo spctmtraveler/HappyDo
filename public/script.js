@@ -49,33 +49,86 @@ window.onload = function () {
 
             },
             
-            onUpdate: function(event) {
-            console.log("onUpdate");
-            toggleUnprioritizedDisplay(); 
+            onUpdate: function() {
+                console.log("onUpdate");
+                toggleUnprioritizedDisplay(); 
             }
 
         });
-    
-        new Sortable(document.getElementById('btn-back'), {
-            group: 'shared',
-            onAdd: function(event) {
-                var taskElement = event.item;
-                var taskId = taskElement.dataset.taskId;
-        
-                // Update the task's backlog in the database
-                updateTaskBacklog(taskId, 1); // Set backlog to 1
-        
-                // Remove the task element from the DOM
-                taskElement.parentNode.removeChild(taskElement);
-            }
-        });
-        
-        
+
+            
 
     });
 
+    // Make all buttons draggable targets
+    const draggableButtons = document.querySelectorAll('.nav-menu button');
 
-    // Fetch tasks and add them to the 'unprioritized-tasks' 
+    draggableButtons.forEach(button => {
+        new Sortable(button, {
+            group: 'shared',
+            onAdd: function (event) {
+                const taskElement = event.item;
+                const taskId = taskElement.dataset.taskId;
+                const buttonId = event.to.id; 
+
+                let newReviewDate;
+
+                // Calculate review date based on buttonId
+                switch (buttonId) {
+                    case 'btn-back':
+                        updateTaskBacklog(taskId, 1);
+                        break;
+                    case 'btn-today':
+                        newReviewDate = getTodaysDate();
+                        break;
+                    case 'btn-tomorrow':
+                        newReviewDate = getTomorrowsDate(); 
+                        break;
+                    case 'btn-this-week':
+                        newReviewDate = getFirstDayOfWeek(); 
+                        break;
+                    case 'btn-next-week':
+                        newReviewDate = getFirstDayOfNextWeek();  
+                        break;
+                    case 'btn-this-month':
+                        newReviewDate = getFirstDayOfMonth(); 
+                        break;
+                    case 'btn-next-month':
+                        newReviewDate = getFirstDayOfNextMonth(); 
+                        break;
+                    default:
+                        console.error('Unknown button ID:', buttonId);
+                }
+
+                // Log the task ID and the new revisit date before the PUT request
+                console.log(`Dragging task ID: ${taskId} to ${buttonId}. New revisit date: ${newReviewDate}`);
+
+
+                // Update the task review date (if we were able to calculate a review date)
+                if (newReviewDate) {
+                    
+                    // Log the request body
+                    console.log('Calling updateTaskReviewDate:', JSON.stringify({
+                        id: taskId,
+                        revisit: newReviewDate
+                    }));
+                    
+                    updateTaskReviewDate(taskId, newReviewDate);
+                }
+
+
+                // Log the removal of the task element from the DOM
+                console.log(`Removing task element with ID: ${taskId} from DOM.`);
+                // Remove the task element from the DOM
+                if (taskElement) {
+                    taskElement.parentNode.removeChild(taskElement);
+                }
+            }
+        });
+    });
+
+
+    // Fetch tasks and add them to the appropriate list 
     fetch('http://localhost/HappyDo/public/index.php')
         .then(response => response.json())
         .then(data => {
@@ -121,6 +174,7 @@ window.onload = function () {
                 if (data.data && data.data.length > 0) {
                     displayTasks(data.data); // Pass the array of tasks to the new displayTasks function
                 } else {
+                    displayTasks([]); // Clear the display if no tasks are found
                     console.log(data.message || 'No tasks found');
                 }
             })
@@ -129,14 +183,42 @@ window.onload = function () {
         
         
         
-        // Event listeners for filter switching buttons
-        document.getElementById('btn-today').addEventListener('click', function() {
-            fetchTasksWithFilter('today');
-        });
-        
-        document.getElementById('btn-back').addEventListener('click', function() {
-            fetchTasksWithFilter('back');
-        });
+    // Event listeners for filter switching buttons
+    document.getElementById('btn-today').addEventListener('click', function() {
+        console.log('Today clicked');
+        fetchTasksWithFilter('today');
+    });
+
+    document.getElementById('btn-tomorrow').addEventListener('click', function() {
+        fetchTasksWithFilter('tomorrow');
+        console.log('Tomorrow clicked');
+    });
+
+    document.getElementById('btn-this-week').addEventListener('click', function() {
+        console.log('This week clicked');
+        fetchTasksWithFilter('thisWeek');
+    });
+
+    document.getElementById('btn-next-week').addEventListener('click', function() {
+        console.log('Next week clicked');
+        fetchTasksWithFilter('nextWeek');
+    });
+
+    document.getElementById('btn-this-month').addEventListener('click', function() {
+        console.log('This month clicked');
+        fetchTasksWithFilter('thisMonth');
+    });
+
+    document.getElementById('btn-next-month').addEventListener('click', function() {
+        console.log('Next month clicked');    
+        fetchTasksWithFilter('nextMonth');
+    });
+
+    document.getElementById('btn-back').addEventListener('click', function() {
+        console.log('Back clicked');
+        fetchTasksWithFilter('back');
+    });
+
 
 };
 
@@ -182,9 +264,18 @@ window.onload = function () {
         taskInput.value = '';  // Clear the input field
     });
 
-    function updateTaskBacklog(taskId, backlogValue) {
-        // Capture the task element before the fetch request
-        var taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+    function updateTaskReviewDate(taskId, newReviewDate) {
+
+
+
+
+        // Check if newReviewDate is already a string, if not, convert to string
+        const formattedNewReviewDate = (typeof newReviewDate === 'string') ? newReviewDate : newReviewDate.toISOString().slice(0, 10);
+
+        console.log('Sending PUT request to update review date with:', JSON.stringify({
+            id: taskId,
+            revisit: formattedNewReviewDate
+        }));
 
         fetch('http://localhost/HappyDo/public/index.php', {
             method: 'PUT',
@@ -193,20 +284,51 @@ window.onload = function () {
             },
             body: JSON.stringify({
                 id: taskId,
-                backlog: backlogValue
+                revisit: formattedNewReviewDate 
             })
         })
         .then(response => response.json())
-        .then(data => {
-            if (data.success && taskElement) {
-                console.log('Backlog updated:', data);
-                // Remove the task element from the DOM after ensuring it exists and the backlog was updated
-                //taskElement.parentNode.removeChild(taskElement);
+        .then(responseData => {
+            /*
+            console.log('Review date updated:', responseData);  
+            if (responseData.success && taskElement) {
+                console.log(`Removing task element with ID: ${taskId} from DOM.`);
+                taskElement.parentNode.removeChild(taskElement); // Remove the task element
             }
-        })
+            */
+        }) 
         .catch(error => {
-            console.error('Error updating backlog:', error);
+            console.error('Error updating review date:', error);
         });
+    } 
+    
+
+    function updateTaskBacklog(taskId, backlogValue) {
+        // Capture the task element before the fetch request
+        var taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+
+        fetch('http://localhost/HappyDo/public/index.php', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: taskId,
+              backlog: backlogValue
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success && taskElement) {
+              console.log('Backlog updated:', data);
+              // Remove the task element from the DOM after ensuring it exists and the backlog was updated
+              //taskElement.parentNode.removeChild(taskElement);
+            }
+          })
+          .catch(error => {
+            console.error('Error updating backlog:', error);
+          });
+          
     }
 
 

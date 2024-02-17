@@ -4,7 +4,9 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #f3f7f7; /* Serene background color */
+    /*background-color: #f3f7f7; /* Serene background color */
+    background-image: url('images/j-lee-PgqsTarkZDw-unsplash.jpg'); /* Background image */
+
 }
 
 body {
@@ -70,14 +72,14 @@ button {
 }
 
 .nav-menu {
-    opacity: 0; /* Initially invisible */
-    transition: opacity 5s ease-in-out; /* Smooth transition */
-    padding: 10px;
+    /* opacity: 0; /* Initially invisible */
+   /* transition: opacity 5s ease-in-out; /* Smooth transition */
+    /*padding: 10px; */
 }
 
 .nav-menu:hover {
-    opacity: 1; /* Visible on hover */
-    transition: opacity 0.2s ease-in-out; /* Slower transition for disappearing */
+   /* opacity: 1; /* Visible on hover */
+   /* transition: opacity 0.2s ease-in-out; /* Slower transition for disappearing */
 
 }
 

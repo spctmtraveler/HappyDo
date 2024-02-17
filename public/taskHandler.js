@@ -43,6 +43,7 @@ function createTaskElement(task) {
 // In taskHandler.js or script.js, depending on where you prefer to keep your task-related functions
 
 function displayTasks(tasks) {
+  console.log('Displaying tasks:', tasks);
   // Clear existing tasks first
   var taskLists = ['unprioritized-tasks', 'list-a-tasks', 'list-b-tasks', 'list-c-tasks'];
   taskLists.forEach(function(listId) {
